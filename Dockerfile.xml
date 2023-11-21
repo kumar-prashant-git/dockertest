@@ -1,0 +1,30 @@
+
+# get tomcat and java jre
+FROM tomcat:8.0-jre8
+
+#set locale
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8  
+
+#set timezone
+ENV TZ="America/New_York"
+RUN date
+
+
+RUN rm -r /usr/local/tomcat/webapps/*
+ADD ./ROOT.war /usr/local/tomcat/webapps/
+
+
+RUN mkdir -p /apps/ccpaDomain/oshift-dev/uploads
+RUN mkdir -p /apps/ccpaDomain/oshift-dev/pdf
+RUN mkdir -p /apps/ccpaDomain/oshift-dev/file_description_pdf
+
+# Exposes port 8080 on the new container image
+EXPOSE 8080
+
+#ENV JAVA_OPTS="-Dspring.profiles.active=local"
+ENV JAVA_OPTS="-Dspring.profiles.active=oshift"
+
+# Sets the main command of the container image
+CMD ["catalina.sh", "run"]
